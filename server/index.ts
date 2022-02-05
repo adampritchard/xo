@@ -1,5 +1,5 @@
 import { WebSocketServer, WebSocket, RawData } from 'ws';
-import { PlayerKey, GameState, ServerMessage } from '../types';
+import { PlayerKey, GameState, ServerMessage, initialGame } from '../types';
 
 type Players = {
   [key in PlayerKey]: WebSocket | null;
@@ -10,15 +10,7 @@ const players: Players = {
   x: null,
 };
 
-const game: GameState = {
-  turn: null,
-  winner: null,
-  board: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
-};
+const game: GameState = initialGame;
 
 const server = new WebSocketServer({ port: 8082 });
 
@@ -163,11 +155,9 @@ function notifyPlayers() {
     if (!ws) continue;
 
     sendMessage(ws, {
-      type: 'game-status',
+      type: 'game-state',
       player: key,
-      turn: game.turn,
-      board: game.board,
-      winner: game.winner,
+      game: game,
     });
   }
 }

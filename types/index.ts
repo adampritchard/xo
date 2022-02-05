@@ -9,23 +9,31 @@ export type GameState = {
 
 export type ServerMessage =
     JoinedMessage
-  | GameStatusMessage;
+  | GameStateMessage;
 
 export type JoinedMessage = {
   type: 'joined',
   player: PlayerKey | null,
 };
 
-export type GameStatusMessage = {
-  type: 'game-status',
+export type GameStateMessage = {
+  type: 'game-state',
   player: PlayerKey | null,
-  turn: PlayerKey | null,
-  winner: PlayerKey | null,
-  board: GameBoard,
+  game: GameState,
 };
 
 export type ClientMessage = {
   type: 'take-turn',
   rowIndex: number,
   cellIndex: number,
+};
+
+export const initialGame: GameState = {
+  turn: null,
+  winner: null,
+  board: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
 };

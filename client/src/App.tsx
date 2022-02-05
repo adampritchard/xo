@@ -5,7 +5,9 @@ import {
   ClientMessage,
   ServerMessage,
   JoinedMessage,
-  GameStatusMessage,
+  GameStateMessage,
+  GameState,
+  initialGame,
 } from '../../types';
 
 function sendMessage(ws: WebSocket, data: ClientMessage) {
@@ -16,19 +18,10 @@ function parseMessage(data: string) {
   return JSON.parse(data) as ServerMessage;
 }
 
-
-const initialBoard: GameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
-
 export function App() {
   const [socket, setWebSocket] = React.useState<WebSocket|null>(null);
   const [player, setPlayer] = React.useState<PlayerKey|null>(null);
-  const [turn, setTurn] = React.useState<PlayerKey|null>(null);
-  const [board, setBoard] = React.useState<GameBoard>(initialBoard);
-  const [winner, setWinner] = React.useState<PlayerKey|null>(null);
+  const [game, setGame] = React.useState<GameState>(initialGame);
 
   React.useEffect(() => {
     const ws = new WebSocket('ws://localhost:8082');
@@ -41,27 +34,23 @@ export function App() {
         setPlayer(data.player);
       }
   
-      function onGameStatus(data: GameStatusMessage) {
-        setTurn(data.turn);
-        setBoard(data.board);
-        setWinner(data.winner);
+      function onGameStatus(data: GameStateMessage) {
+        setGame(data.game);
       }
 
-      if (data.type === 'joined')      onJoined(data);
-      if (data.type === 'game-status') onGameStatus(data);
+      if (data.type === 'joined')     onJoined(data);
+      if (data.type === 'game-state') onGameStatus(data);
     });
   }, []);
 
   const onTakeTurn = React.useCallback((rowIndex, cellIndex) => {
     if (!socket) return;
-    if (turn !== player) return;
-    if (board[rowIndex][cellIndex] !== null) return;
-    if (winner) return;
+    if (game.turn !== player) return;
+    if (game.board[rowIndex][cellIndex] !== null) return;
+    if (game.winner) return;
 
     sendMessage(socket, { type: 'take-turn', rowIndex, cellIndex });
-  }, [socket, turn, player, board, winner]);
-
-  console.log('winner', winner);
+  }, [socket, player, game]);
 
   return (
     <div>
@@ -69,16 +58,16 @@ export function App() {
 
       {/* TODO: 'Waiting for another player...' */}
 
-      {winner !== null
-        ? <Winner player={player} winner={winner} />
-        : turn === null
+      {game.winner !== null
+        ? <Winner player={player} winner={game.winner} />
+        : game.turn === null
         ? null
-        : turn === player
+        : game.turn === player
         ? <YourTurn />
         : <TheirTurn />
       }
 
-      <Board board={board} onTakeTurn={onTakeTurn} />
+      <Board board={game.board} onTakeTurn={onTakeTurn} />
     </div>
   );
 }

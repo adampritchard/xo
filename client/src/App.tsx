@@ -1,21 +1,12 @@
 import React from 'react';
-
-type PlayerKey = 'o' | 'x';
-type GameBoard = (PlayerKey | null)[][];
-
-type ServerMessage = {
-  type: 'joined' | 'game-status',
-  player: PlayerKey | null,
-  turn: PlayerKey | null,
-  board: GameBoard,
-  winner: PlayerKey | null,
-};
-
-type ClientMessage = {
-  type: 'take-turn',
-  rowIndex: number,
-  cellIndex: number,
-};
+import {
+  PlayerKey,
+  GameBoard,
+  ClientMessage,
+  ServerMessage,
+  JoinedMessage,
+  GameStatusMessage,
+} from '../../types';
 
 function sendMessage(ws: WebSocket, data: ClientMessage) {
   ws.send(JSON.stringify(data));
@@ -46,11 +37,11 @@ export function App() {
     ws.addEventListener('message', (event) => {
       const data = parseMessage(event.data);
 
-      function onJoined(data: ServerMessage) {
+      function onJoined(data: JoinedMessage) {
         setPlayer(data.player);
       }
   
-      function onGameStatus(data: ServerMessage) {
+      function onGameStatus(data: GameStatusMessage) {
         setTurn(data.turn);
         setBoard(data.board);
         setWinner(data.winner);

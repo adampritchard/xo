@@ -1,13 +1,5 @@
 import { WebSocketServer, WebSocket, RawData } from 'ws';
-
-type PlayerKey = 'o' | 'x';
-type GameBoard = (PlayerKey | null)[][];
-
-type GameState = {
-  turn: PlayerKey | null,
-  board: GameBoard,
-  winner: PlayerKey | null,
-};
+import { PlayerKey, GameState, ServerMessage } from '../types';
 
 type Players = {
   [key in PlayerKey]: WebSocket | null;
@@ -20,31 +12,13 @@ const players: Players = {
 
 const game: GameState = {
   turn: null,
+  winner: null,
   board: [
     [null, null, null],
     [null, null, null],
     [null, null, null],
   ],
-  winner: null,
 };
-
-type ServerMessage =
-    JoinedMessage
-  | GameStatusMessage;
-
-type JoinedMessage = {
-  type: 'joined',
-  player: PlayerKey | null,
-};
-
-type GameStatusMessage = {
-  type: 'game-status',
-  player: PlayerKey | null,
-  turn: PlayerKey | null,
-  board: GameBoard,
-  winner: PlayerKey | null,
-};
-
 
 const server = new WebSocketServer({ port: 8082 });
 

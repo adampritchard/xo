@@ -43,7 +43,7 @@ export function App() {
     });
   }, []);
 
-  const onTakeTurn = React.useCallback((rowIndex, cellIndex) => {
+  const onTakeTurn = React.useCallback((rowIndex: number, cellIndex: number) => {
     if (!socket) return;
     if (game.turn !== player) return;
     if (game.board[rowIndex][cellIndex] !== null) return;

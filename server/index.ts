@@ -1,5 +1,5 @@
 import { WebSocketServer, WebSocket, RawData } from 'ws';
-import { PlayerKey, GameState, ServerMessage, initialGame } from '../types';
+import { PlayerKey, GameState, ServerMessage, initialGame, ClientMessage } from '../types';
 
 type Players = {
   [key in PlayerKey]: WebSocket | null;
@@ -33,7 +33,7 @@ function sendMessage(ws: WebSocket, data: ServerMessage) {
 }
 
 function parseMessage(buffer: RawData) {
-  return JSON.parse(buffer.toString());
+  return JSON.parse(buffer.toString()) as ClientMessage;
 }
 
 function hasPlayer(key: PlayerKey) {

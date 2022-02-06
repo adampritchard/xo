@@ -76,13 +76,13 @@ export function Room() {
     });
   }, [roomId]);
 
-  const onTakeTurn = React.useCallback((rowIndex: number, cellIndex: number) => {
+  const onTakeTurn = React.useCallback((row: number, col: number) => {
     if (!socket) return;
     if (game.turn !== player) return;
-    if (game.board[rowIndex][cellIndex] !== null) return;
+    if (game.board[row][col] !== null) return;
     if (game.winner) return;
 
-    sendMessage(socket, { type: 'take-turn', rowIndex, cellIndex });
+    sendMessage(socket, { type: 'take-turn', row, col });
   }, [socket, player, game]);
 
   if (status === 'init') {

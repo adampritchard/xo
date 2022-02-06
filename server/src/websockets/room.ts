@@ -1,7 +1,7 @@
 import { WebSocket } from 'ws';
 import { PlayerKey, GameState } from 'shared/types';
 import { parseMessage, sendMessage } from './utils';
-import { GameRules } from './game-rules';
+import { Game } from './game';
 
 export class Room {
   private roomId: string;
@@ -56,7 +56,7 @@ export class Room {
       console.log(`message from player ${key}`, data);
   
       if (data.type === 'take-turn') {
-        this.takeTurn(ws, key, data.rowIndex, data.cellIndex);
+        this.takeTurn(ws, key, data.row, data.col);
       }
     });
 
@@ -68,13 +68,13 @@ export class Room {
     this.notifyPlayers();
   }
 
-  private takeTurn(ws: WebSocket, key: PlayerKey, rowIndex: number, cellIndex: number) {
+  private takeTurn(ws: WebSocket, key: PlayerKey, row: number, col: number) {
     if (key !== this.game.turn) return;
 
-    if (this.game.board[rowIndex][cellIndex] === null) {
-      this.game.board[rowIndex][cellIndex] = key;
+    if (Game.isCellEmpty(this.game.board, row, col)) {
+      Game.setCell(this.game.board, row, col, key);
 
-      this.game.winner = GameRules.checkForWinner(this.game.board);
+      this.game.winner = Game.checkForWinner(this.game.board);
       if (!this.game.winner) this.nextTurn();
       this.notifyPlayers();
     }

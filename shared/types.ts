@@ -1,9 +1,11 @@
 export type PlayerKey = 'o' | 'x';
 export type GameBoard = (PlayerKey | null)[][];
 
+export type Winner = PlayerKey | 'draw' | null;
+
 export type GameState = {
   turn: PlayerKey | null,
-  winner: PlayerKey | null,
+  winner: Winner,
   board: GameBoard,
 };
 
@@ -47,8 +49,8 @@ type JoinRoomMessage = {
 
 type TakeTurnMessage = {
   type: 'take-turn',
-  rowIndex: number,
-  cellIndex: number,
+  row: number,
+  col: number,
 };
 
 export type CreateRoomRes = {

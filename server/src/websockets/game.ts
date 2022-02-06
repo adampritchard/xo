@@ -1,7 +1,15 @@
-import { PlayerKey, GameBoard } from 'shared/types';
+import { PlayerKey, GameBoard, Winner } from 'shared/types';
 
-export class GameRules {
-  public static checkForWinner(board: GameBoard): PlayerKey | null {
+export class Game {
+  public static isCellEmpty(board: GameBoard, row: number, col: number): boolean {
+    return board[row][col] === null;
+  }
+
+  public static setCell(board: GameBoard, row: number, col: number, value: PlayerKey) : void {
+    board[row][col] = value;
+  }
+
+  public static checkForWinner(board: GameBoard): Winner {
     const winningLines = [
       // rows.
       [[0, 0], [0, 1], [0, 2]],
@@ -18,9 +26,15 @@ export class GameRules {
       [[0, 2], [1, 1], [2, 0]],
     ];
   
+    // Check for winning line.
     for (const line of winningLines) {
       const winner = this.winnerForLine(board, line);
       if (winner) return winner;
+    }
+
+    // Check for draw.
+    if (this.isBoardFull(board)) {
+      return 'draw';
     }
 
     return null;
@@ -40,5 +54,15 @@ export class GameRules {
     }
   
     return null;
+  }
+
+  private static isBoardFull(board: GameBoard): boolean {
+    for (const row of board) {
+      for (const cell of row) {
+        if (!cell) return false;
+      }
+    }
+
+    return true;
   }
 }

@@ -6,6 +6,11 @@
       "dom.iterable",
       "esnext"
     ],
+    "paths": {
+      "shared/*": ["./../shared/*"],
+      "components": ["./src/components"],
+      "components/*": ["./src/components/*"]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
+  devtool: 'source-map',
 
   entry: './src/index.tsx',
   output: {
@@ -11,6 +11,10 @@ module.exports = {
 
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      shared: path.resolve(__dirname, '../shared/'),
+      components: path.resolve(__dirname, 'src/components/'),
+    }
   },
 
   module: {

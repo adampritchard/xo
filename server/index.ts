@@ -1,5 +1,5 @@
 import { WebSocketServer, WebSocket, RawData } from 'ws';
-import { PlayerKey, GameState, ServerMessage, initialGame, ClientMessage } from '../types';
+import { PlayerKey, GameState, ServerMessage, initialGame, ClientMessage } from '../shared/types';
 
 type Players = {
   [key in PlayerKey]: WebSocket | null;

@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   PlayerKey,
-  GameBoard,
   ClientMessage,
   ServerMessage,
   JoinedMessage,
   GameStateMessage,
   GameState,
   initialGame,
-} from '../../types';
+} from 'shared/types';
+import { PlayerHeading, Board, Winner } from 'components';
 
 function sendMessage(ws: WebSocket, data: ClientMessage) {
   ws.send(JSON.stringify(data));
@@ -72,21 +72,6 @@ export function App() {
   );
 }
 
-
-type PlayerHeadingProps = {
-  player: PlayerKey | null,
-};
-
-function PlayerHeading({ player }: PlayerHeadingProps) {
-  function getHeadingText() {
-    if (player === null) return 'You are not playing';
-    if (player === 'o') return 'You are o';
-    if (player === 'x') return 'You are x';
-  }
-
-  return <h3>{getHeadingText()}</h3>
-}
-
 function TheirTurn() {
   return (
     <div>
@@ -99,62 +84,6 @@ function YourTurn() {
   return (
     <div>
       <h3>Your Turn</h3>
-    </div>
-  );
-}
-
-type WinnerProps = {
-  player: PlayerKey | null,
-  winner: PlayerKey | null,
-};
-
-function Winner({ player, winner }: WinnerProps) {
-  if (player === winner) return <h2>You Win!</h2>;
-  return <h2>You Lose...</h2>;
-}
-
-type BoardProps = {
-  board: GameBoard,
-  onTakeTurn: (rowIndex: number, cellIndex: number) => void,
-};
-
-function Board({ board, onTakeTurn }: BoardProps) {
-  return (
-    <div className="board">
-      {board.map((row, rowIndex) =>
-        <Row key={rowIndex}>
-          {row.map((cell, cellIndex) =>
-            <Cell
-              key={cellIndex}
-              value={cell}
-              onClick={() => onTakeTurn(rowIndex, cellIndex)}
-            />
-          )}
-        </Row>
-      )}
-    </div>
-  );
-}
-
-
-type RowProps = { children: React.ReactNode };
-
-function Row({ children }: RowProps) {
-  return (
-    <div className="row">{children}</div>
-  );
-}
-
-
-type CellProps = {
-  value: PlayerKey | null,
-  onClick: () => void,
-};
-
-function Cell({ value, onClick }: CellProps) {
-  return (
-    <div className="cell" onClick={onClick}>
-      {value || <>&nbsp;</>}
     </div>
   );
 }

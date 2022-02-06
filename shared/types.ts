@@ -8,17 +8,31 @@ export type GameState = {
 };
 
 export type ServerMessage =
-    JoinedMessage
+  | RoomJoinedMessge
+  | RoomFullMessage
+  | RoomNotFoundMessage
   | GameStateMessage
   | PingCountMessage;
 
-export type JoinedMessage = {
-  type: 'joined',
+export type RoomJoinedMessge = {
+  type: 'room-joined',
   player: PlayerKey | null,
+  roomId: string,
+};
+
+export type RoomFullMessage = {
+  type: 'room-full',
+  roomId: string,
+};
+
+export type RoomNotFoundMessage = {
+  type: 'room-not-found',
+  roomId: string,
 };
 
 export type GameStateMessage = {
   type: 'game-state',
+  roomId: string,
   player: PlayerKey | null,
   game: GameState,
 };
@@ -28,7 +42,16 @@ export type PingCountMessage = {
   count: number,
 };
 
-export type ClientMessage = {
+export type ClientMessage =
+    TakeTurnMessage
+  | JoinRoomMessage;
+
+type JoinRoomMessage = {
+  type: 'join-room',
+  roomId: string,
+};
+
+type TakeTurnMessage = {
   type: 'take-turn',
   rowIndex: number,
   cellIndex: number,
@@ -36,14 +59,4 @@ export type ClientMessage = {
 
 export type CreateRoomRes = {
   roomId: string | null,
-};
-
-export const initialGame: GameState = {
-  turn: null,
-  winner: null,
-  board: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
 };

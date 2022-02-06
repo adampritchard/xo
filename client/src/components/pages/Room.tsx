@@ -1,40 +1,53 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import {
   PlayerKey,
-  ClientMessage,
-  ServerMessage,
-  JoinedMessage,
   GameStateMessage,
   GameState,
-  initialGame,
   PingCountMessage,
+  RoomJoinedMessge,
+  RoomFullMessage,
+  RoomNotFoundMessage,
 } from 'shared/types';
 import { PlayerHeading, Board, Winner } from 'components';
+import { parseMessage, sendMessage, UnreachableCaseError } from 'utils/misc';
 
-function sendMessage(ws: WebSocket, data: ClientMessage) {
-  ws.send(JSON.stringify(data));
-}
+type Status = 'init' | 'room-joined' | 'room-full' | 'room-not-found';
 
-function parseMessage(data: string) {
-  return JSON.parse(data) as ServerMessage;
-}
+const initialGame: GameState = {
+  turn: null,
+  winner: null,
+  board: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+};
 
 export function Room() {
+  const { roomId } = useParams();
+  
+  const [status, setStatus] = React.useState<Status>('init');
   const [socket, setWebSocket] = React.useState<WebSocket|null>(null);
   const [player, setPlayer] = React.useState<PlayerKey|null>(null);
   const [game, setGame] = React.useState<GameState>(initialGame);
   const [pingCount, setPingCount] = React.useState<number|null>(null);
 
   React.useEffect(() => {
+    if (!roomId) return;
+
     const ws = new WebSocket('ws://localhost:8082');
     setWebSocket(ws);
 
+    ws.addEventListener('open', (event) => {
+      sendMessage(ws, {
+        type: 'join-room',
+        roomId,
+      });
+    });
+
     ws.addEventListener('message', (event) => {
       const data = parseMessage(event.data);
-
-      function onJoined(data: JoinedMessage) {
-        setPlayer(data.player);
-      }
   
       function onGameStatus(data: GameStateMessage) {
         setGame(data.game);
@@ -44,11 +57,31 @@ export function Room() {
         setPingCount(data.count);
       }
 
-      if (data.type === 'joined')     onJoined(data);
-      if (data.type === 'game-state') onGameStatus(data);
-      if (data.type === 'ping-count') onPingCount(data);
+      function onRoomJoined(data: RoomJoinedMessge) {
+        setStatus('room-joined');
+        setPlayer(data.player);
+      }
+
+      function onRoomFull(data: RoomFullMessage) {
+        setStatus('room-full');
+      }
+
+      function onRoomNotFound(data: RoomNotFoundMessage) {
+        setStatus('room-not-found');
+      }
+
+      const { type } = data;
+      switch (type) {
+        case 'room-joined':    return onRoomJoined(data);
+        case 'room-full':      return onRoomFull(data);
+        case 'room-not-found': return onRoomNotFound(data);
+        case 'game-state':     return onGameStatus(data);
+        case 'ping-count':     return onPingCount(data);
+
+        default: throw new UnreachableCaseError(type);
+      }
     });
-  }, []);
+  }, [roomId]);
 
   const onTakeTurn = React.useCallback((rowIndex: number, cellIndex: number) => {
     if (!socket) return;
@@ -58,6 +91,18 @@ export function Room() {
 
     sendMessage(socket, { type: 'take-turn', rowIndex, cellIndex });
   }, [socket, player, game]);
+
+  if (status === 'init') {
+    return <div><h1>Loading</h1></div>;
+  }
+
+  if (status === 'room-full') {
+    return <div><h1>This Room is Full :(</h1></div>;
+  }
+
+  if (status === 'room-not-found') {
+    return <div><h1>Room Not Found :(</h1></div>;
+  }
 
   return (
     <div>

@@ -2,7 +2,7 @@ import express, { Response } from 'express';
 import cors from 'cors';
 import { CreateRoomRes } from 'shared/types';
 import { incrementPingCounter } from './ping';
-import { createRoom } from './rooms';
+import { Rooms } from './rooms';
 
 type InitParams = { port: number };
 
@@ -20,7 +20,7 @@ export function initApiServer({ port }: InitParams) {
   });
 
   api.post('/room', (req, res: Response<CreateRoomRes>) => {
-    const roomId = createRoom();
+    const roomId = Rooms.create();
     res.json({ roomId });
   });
 

@@ -1,0 +1,21 @@
+✔ split react components into files
+✔ move initWebSocketServer into own file
+✔ can I also run an express server on another port??
+✔ try sharing data between the api and websockets...
+✔ setup start and room routes
+✔ join room messages
+✔ setup actual rooms
+✔ 'room-full' message
+✔ 'room-not-found' message
+
+- ditch the ping count stuff
+- split server into 'api' and 'websockets' folders
+
+- remove rooms after timeout (room will self destruct in ...)
+- disconnect everyone when room is removed
+
+- setup a Board class (checkWinner, isCellEmpty(row, col), setCell(row, col))
+
+- set up a ping that triggers close if no pong
+
+- 'Waiting for another player' message

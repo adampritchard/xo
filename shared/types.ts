@@ -34,6 +34,10 @@ export type ClientMessage = {
   cellIndex: number,
 };
 
+export type CreateRoomRes = {
+  roomId: string | null,
+};
+
 export const initialGame: GameState = {
   turn: null,
   winner: null,

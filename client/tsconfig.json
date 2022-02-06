@@ -9,7 +9,9 @@
     "paths": {
       "shared/*": ["./../shared/*"],
       "components": ["./src/components"],
-      "components/*": ["./src/components/*"]
+      "components/*": ["./src/components/*"],
+      "utils": ["./src/utils"],
+      "utils/*": ["./src/utils/*"]
     },
     "allowJs": true,
     "skipLibCheck": true,

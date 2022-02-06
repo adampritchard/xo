@@ -112,15 +112,13 @@ export function Room() {
     <div>
       <PlayerHeading player={player} />
 
-      {/* TODO: 'Waiting for another player...' */}
-
       {game.winner !== null
         ? <Winner player={player} winner={game.winner} />
         : game.turn === null
-        ? null
+        ? <h3>Waiting for another player...</h3>
         : game.turn === player
-        ? <YourTurn />
-        : <TheirTurn />
+        ? <h3>Your Turn</h3>
+        : <h3>Their turn...</h3>
       }
 
       <Board board={game.board} onTakeTurn={onTakeTurn} />
@@ -128,22 +126,6 @@ export function Room() {
       {expiresIn &&
         <div>This room will self-desctruct in {expiresIn}</div>
       }
-    </div>
-  );
-}
-
-function TheirTurn() {
-  return (
-    <div>
-      <h3>Their turn...</h3>
-    </div>
-  );
-}
-
-function YourTurn() {
-  return (
-    <div>
-      <h3>Your Turn</h3>
     </div>
   );
 }

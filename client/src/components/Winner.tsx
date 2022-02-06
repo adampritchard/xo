@@ -7,7 +7,7 @@ type WinnerProps = {
 };
 
 export function Winner({ player, winner }: WinnerProps) {
-  if (winner === 'draw') return <h2>Draw...</h2>;
-  if (player === winner) return <h2>You Win!</h2>;
-  return <h2>You Lose :(</h2>;
+  if (winner === 'draw') return <h3>Draw...</h3>;
+  if (player === winner) return <h3>You Win!</h3>;
+  return <h3>You Lose :(</h3>;
 }

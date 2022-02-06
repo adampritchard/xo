@@ -14,8 +14,9 @@
 ✔ remove rooms after timeout
 ✔ disconnect everyone when room is removed
 ✔ set up a ping that closes connection if no pong
+✔ 'Waiting for another player' message
 
-- 'Waiting for another player' message
+- styles
+
 - send expiresIn every 30 seconds
-
 - Figure out how to test disconnects and use the Reaper class

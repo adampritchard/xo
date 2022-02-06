@@ -17,8 +17,9 @@ export type ServerMessage =
 
 export type RoomJoinedMessge = {
   type: 'room-joined',
-  player: PlayerKey | null,
   roomId: string,
+  expiresIn: string,
+  player: PlayerKey,
 };
 
 export type RoomFullMessage = {
@@ -34,7 +35,8 @@ export type RoomNotFoundMessage = {
 export type GameStateMessage = {
   type: 'game-state',
   roomId: string,
-  player: PlayerKey | null,
+  expiresIn: string,
+  player: PlayerKey,
   game: GameState,
 };
 

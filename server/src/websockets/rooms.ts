@@ -1,4 +1,5 @@
 import { WebSocket } from 'ws';
+import ms from 'ms';
 import { sendMessage, randomLetter } from './utils';
 import { Room } from './room';
 
@@ -7,10 +8,15 @@ export class Rooms {
 
   public static create() {
     const roomId = this.generateId();
-    this.rooms.set(roomId, new Room(roomId));
+    const expiry = ms('10min');
 
-    // TODO: set a timeout on the room...
-    //       maybe set an 'expiryTimestamp' on the room or something?
+    const room = new Room(roomId, expiry);
+    this.rooms.set(roomId, room);
+
+    setTimeout(() => {
+      room.close();
+      this.rooms.delete(roomId);
+    }, expiry);
 
     return roomId;
   }

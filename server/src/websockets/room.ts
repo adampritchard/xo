@@ -1,10 +1,12 @@
 import { WebSocket } from 'ws';
+import ms from 'ms';
 import { PlayerKey, GameState } from 'shared/types';
 import { parseMessage, sendMessage } from './utils';
 import { Game } from './game';
 
 export class Room {
   private roomId: string;
+  private expiresAt: number;
 
   private players = new Map<PlayerKey, WebSocket>();
 
@@ -18,8 +20,9 @@ export class Room {
     ],
   };
 
-  public constructor(roomId: string) {
+  public constructor(roomId: string, expiry: number) {
     this.roomId = roomId;
+    this.expiresAt = Date.now() + expiry;
   }
 
   public join(ws: WebSocket): void {
@@ -35,6 +38,17 @@ export class Room {
     }
   }
 
+  public close(): void {
+    console.log(`closing room ${this.roomId}`);
+
+    this.players.forEach((ws) => {
+      ws.removeAllListeners();
+      ws.close();
+    });
+
+    this.players.clear();
+  }
+
   private setPlayer(ws: WebSocket, key: PlayerKey) {
     console.log(`player ${key} joined room ${this.roomId}`);
   
@@ -43,6 +57,7 @@ export class Room {
     sendMessage(ws, {
       type: 'room-joined',
       roomId: this.roomId,
+      expiresIn: this.getExpiresInText(),
       player: key,
     });
   
@@ -95,9 +110,14 @@ export class Room {
       sendMessage(ws, {
         type: 'game-state',
         roomId: this.roomId,
+        expiresIn: this.getExpiresInText(),
         player: key,
         game: this.game,
       });
     });
+  }
+
+  private getExpiresInText(): string {
+    return ms(this.expiresAt - Date.now(), { long: true });
   }
 }

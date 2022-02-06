@@ -11,7 +11,7 @@ import {
 import { PlayerHeading, Board, Winner } from 'components';
 import { parseMessage, sendMessage, UnreachableCaseError } from 'utils/misc';
 
-type Status = 'init' | 'room-joined' | 'room-full' | 'room-not-found';
+type Status = 'init' | 'room-joined' | 'room-full' | 'room-not-found' | 'room-closed';
 
 const initialGame: GameState = {
   turn: null,
@@ -30,6 +30,7 @@ export function Room() {
   const [socket, setWebSocket] = React.useState<WebSocket|null>(null);
   const [player, setPlayer] = React.useState<PlayerKey|null>(null);
   const [game, setGame] = React.useState<GameState>(initialGame);
+  const [expiresIn, setExpiresIn] = React.useState<string|null>(null);
 
   React.useEffect(() => {
     if (!roomId) return;
@@ -44,16 +45,22 @@ export function Room() {
       });
     });
 
+    ws.addEventListener('close', (event) => {
+      setStatus('room-closed');
+    });
+
     ws.addEventListener('message', (event) => {
       const data = parseMessage(event.data);
   
       function onGameStatus(data: GameStateMessage) {
         setGame(data.game);
+        setExpiresIn(data.expiresIn);
       }
 
       function onRoomJoined(data: RoomJoinedMessge) {
         setStatus('room-joined');
         setPlayer(data.player);
+        setExpiresIn(data.expiresIn);
       }
 
       function onRoomFull(data: RoomFullMessage) {
@@ -94,7 +101,11 @@ export function Room() {
   }
 
   if (status === 'room-not-found') {
-    return <div><h1>Room Not Found :(</h1></div>;
+    return <div><h1>Room Not Found</h1></div>;
+  }
+
+  if (status === 'room-closed') {
+    return <div><h1>This Room is Now Closed :(</h1></div>;
   }
 
   return (
@@ -113,6 +124,10 @@ export function Room() {
       }
 
       <Board board={game.board} onTakeTurn={onTakeTurn} />
+
+      {expiresIn &&
+        <div>This room will self-desctruct in {expiresIn}</div>
+      }
     </div>
   );
 }

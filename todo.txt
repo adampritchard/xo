@@ -11,10 +11,12 @@
 ✔ split server into 'api' and 'websockets' folders
 ✔ setup a Board class (checkWinner, isCellEmpty(row, col), setCell(row, col))
 ✔ check for draw
+✔ remove rooms after timeout
+✔ disconnect everyone when room is removed
 
-- remove rooms after timeout (room will self destruct in ...)
-- disconnect everyone when room is removed
+- set up a ping that closes connection if no pong
+  - check the ws github docs
 
-- set up a ping that triggers close if no pong
+- send expiresIn every 30 seconds
 
 - 'Waiting for another player' message

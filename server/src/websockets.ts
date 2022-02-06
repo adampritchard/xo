@@ -1,5 +1,5 @@
 import { WebSocketServer, WebSocket, RawData } from 'ws';
-import { PlayerKey, GameState, ServerMessage, initialGame, ClientMessage } from '../shared/types';
+import { PlayerKey, GameState, ServerMessage, initialGame, ClientMessage } from 'shared/types';
 
 type Players = {
   [key in PlayerKey]: WebSocket | null;
@@ -12,21 +12,27 @@ const players: Players = {
 
 const game: GameState = initialGame;
 
-const server = new WebSocketServer({ port: 8082 });
+type InitParams = { port: number };
 
-server.on('connection', (ws, req) => {
-  console.log('new connection');
+export function initWebSocketServer({ port }: InitParams) {
+  const server = new WebSocketServer({ port });
 
-  if (isGameFull()) return rejectPlayer(ws);
+  server.on('connection', (ws, req) => {
+    console.log('new connection');
 
-  if (!hasPlayer('o')) {
-    setPlayer('o', ws);
-  } else if (!hasPlayer('x')) {
-    setPlayer('x', ws);
-  }
+    if (isGameFull()) return rejectPlayer(ws);
 
-  updateGameStatus();
-});
+    if (!hasPlayer('o')) {
+      setPlayer('o', ws);
+    } else if (!hasPlayer('x')) {
+      setPlayer('x', ws);
+    }
+
+    updateGameStatus();
+  });
+
+  return server;
+}
 
 function sendMessage(ws: WebSocket, data: ServerMessage) {
   ws.send(JSON.stringify(data));

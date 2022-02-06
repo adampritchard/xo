@@ -9,7 +9,9 @@
 ✔ 'room-not-found' message
 
 ✔ ditch the ping count stuff
-- split server into 'api' and 'websockets' folders
+✔ split server into 'api' and 'websockets' folders
+
+- no winner
 
 - remove rooms after timeout (room will self destruct in ...)
 - disconnect everyone when room is removed
@@ -19,3 +21,4 @@
 - set up a ping that triggers close if no pong
 
 - 'Waiting for another player' message
+

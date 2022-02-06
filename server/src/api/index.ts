@@ -1,7 +1,7 @@
 import express, { Response } from 'express';
 import cors from 'cors';
 import { CreateRoomRes } from 'shared/types';
-import { Rooms } from './rooms';
+import { Rooms } from '../websockets/rooms';
 
 type InitParams = { port: number };
 

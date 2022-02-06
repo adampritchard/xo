@@ -17,6 +17,8 @@ type InitParams = { port: number };
 export function initWebSocketServer({ port }: InitParams) {
   const server = new WebSocketServer({ port });
 
+  console.log(`web socket server listening on port ${port}`);
+
   server.on('connection', (ws, req) => {
     console.log('new connection');
 

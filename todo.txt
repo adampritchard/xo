@@ -13,10 +13,9 @@
 ✔ check for draw
 ✔ remove rooms after timeout
 ✔ disconnect everyone when room is removed
-
-- set up a ping that closes connection if no pong
-  - check the ws github docs
-
-- send expiresIn every 30 seconds
+✔ set up a ping that closes connection if no pong
 
 - 'Waiting for another player' message
+- send expiresIn every 30 seconds
+
+- Figure out how to test disconnects and use the Reaper class

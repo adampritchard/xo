@@ -1,5 +1,6 @@
 import { WebSocketServer, WebSocket, RawData } from 'ws';
 import { PlayerKey, GameState, ServerMessage, initialGame, ClientMessage } from 'shared/types';
+import { onPingCountChanged } from './ping';
 
 type Players = {
   [key in PlayerKey]: WebSocket | null;
@@ -31,6 +32,10 @@ export function initWebSocketServer({ port }: InitParams) {
     }
 
     updateGameStatus();
+  });
+
+  onPingCountChanged((count) => {
+    notifyPingCount(count);
   });
 
   return server;
@@ -166,6 +171,19 @@ function notifyPlayers() {
       type: 'game-state',
       player: key,
       game: game,
+    });
+  }
+}
+
+function notifyPingCount(count: number) {
+  let key: keyof typeof players;
+  for (key in players) {
+    const ws = players[key];
+    if (!ws) continue;
+
+    sendMessage(ws, {
+      type: 'ping-count',
+      count,
     });
   }
 }

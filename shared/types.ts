@@ -9,7 +9,8 @@ export type GameState = {
 
 export type ServerMessage =
     JoinedMessage
-  | GameStateMessage;
+  | GameStateMessage
+  | PingCountMessage;
 
 export type JoinedMessage = {
   type: 'joined',
@@ -20,6 +21,11 @@ export type GameStateMessage = {
   type: 'game-state',
   player: PlayerKey | null,
   game: GameState,
+};
+
+export type PingCountMessage = {
+  type: 'ping-count',
+  count: number,
 };
 
 export type ClientMessage = {

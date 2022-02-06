@@ -7,6 +7,7 @@ import {
   GameStateMessage,
   GameState,
   initialGame,
+  PingCountMessage,
 } from 'shared/types';
 import { PlayerHeading, Board, Winner } from 'components';
 
@@ -22,6 +23,7 @@ export function App() {
   const [socket, setWebSocket] = React.useState<WebSocket|null>(null);
   const [player, setPlayer] = React.useState<PlayerKey|null>(null);
   const [game, setGame] = React.useState<GameState>(initialGame);
+  const [pingCount, setPingCount] = React.useState<number|null>(null);
 
   React.useEffect(() => {
     const ws = new WebSocket('ws://localhost:8082');
@@ -38,8 +40,13 @@ export function App() {
         setGame(data.game);
       }
 
+      function onPingCount(data: PingCountMessage) {
+        setPingCount(data.count);
+      }
+
       if (data.type === 'joined')     onJoined(data);
       if (data.type === 'game-state') onGameStatus(data);
+      if (data.type === 'ping-count') onPingCount(data);
     });
   }, []);
 
@@ -68,6 +75,10 @@ export function App() {
       }
 
       <Board board={game.board} onTakeTurn={onTakeTurn} />
+
+      <div>
+        Ping Count: {pingCount ?? 'unknown'}
+      </div>
     </div>
   );
 }

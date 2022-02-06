@@ -1,4 +1,5 @@
 import express from 'express';
+import { incrementPingCounter } from './ping';
 
 type InitParams = { port: number };
 
@@ -7,6 +8,11 @@ export function initApiServer({ port }: InitParams) {
 
   api.get('/', (req, res) => {
     res.json({ msg: 'Hello, world!' });
+  });
+
+  api.get('/ping', (req, res) => {
+    const count = incrementPingCounter();
+    res.json({ pingCount: count });
   });
 
   api.listen(port, () => {

@@ -8,7 +8,7 @@
 ✔ 'room-full' message
 ✔ 'room-not-found' message
 
-- ditch the ping count stuff
+✔ ditch the ping count stuff
 - split server into 'api' and 'websockets' folders
 
 - remove rooms after timeout (room will self destruct in ...)

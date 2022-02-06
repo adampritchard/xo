@@ -1,7 +1,6 @@
 import express, { Response } from 'express';
 import cors from 'cors';
 import { CreateRoomRes } from 'shared/types';
-import { incrementPingCounter } from './ping';
 import { Rooms } from './rooms';
 
 type InitParams = { port: number };
@@ -11,12 +10,7 @@ export function initApiServer({ port }: InitParams) {
   api.use(cors());
 
   api.get('/', (req, res) => {
-    res.json({ msg: 'Hello, world!' });
-  });
-
-  api.get('/ping', (req, res) => {
-    const count = incrementPingCounter();
-    res.json({ pingCount: count });
+    res.json({ msg: 'Hello, exoh!' });
   });
 
   api.post('/room', (req, res: Response<CreateRoomRes>) => {

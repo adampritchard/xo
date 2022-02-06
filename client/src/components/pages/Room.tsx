@@ -4,7 +4,6 @@ import {
   PlayerKey,
   GameStateMessage,
   GameState,
-  PingCountMessage,
   RoomJoinedMessge,
   RoomFullMessage,
   RoomNotFoundMessage,
@@ -31,7 +30,6 @@ export function Room() {
   const [socket, setWebSocket] = React.useState<WebSocket|null>(null);
   const [player, setPlayer] = React.useState<PlayerKey|null>(null);
   const [game, setGame] = React.useState<GameState>(initialGame);
-  const [pingCount, setPingCount] = React.useState<number|null>(null);
 
   React.useEffect(() => {
     if (!roomId) return;
@@ -53,10 +51,6 @@ export function Room() {
         setGame(data.game);
       }
 
-      function onPingCount(data: PingCountMessage) {
-        setPingCount(data.count);
-      }
-
       function onRoomJoined(data: RoomJoinedMessge) {
         setStatus('room-joined');
         setPlayer(data.player);
@@ -76,7 +70,6 @@ export function Room() {
         case 'room-full':      return onRoomFull(data);
         case 'room-not-found': return onRoomNotFound(data);
         case 'game-state':     return onGameStatus(data);
-        case 'ping-count':     return onPingCount(data);
 
         default: throw new UnreachableCaseError(type);
       }
@@ -120,10 +113,6 @@ export function Room() {
       }
 
       <Board board={game.board} onTakeTurn={onTakeTurn} />
-
-      <div>
-        Ping Count: {pingCount ?? 'unknown'}
-      </div>
     </div>
   );
 }

@@ -11,8 +11,7 @@ export type ServerMessage =
   | RoomJoinedMessge
   | RoomFullMessage
   | RoomNotFoundMessage
-  | GameStateMessage
-  | PingCountMessage;
+  | GameStateMessage;
 
 export type RoomJoinedMessge = {
   type: 'room-joined',
@@ -35,11 +34,6 @@ export type GameStateMessage = {
   roomId: string,
   player: PlayerKey | null,
   game: GameState,
-};
-
-export type PingCountMessage = {
-  type: 'ping-count',
-  count: number,
 };
 
 export type ClientMessage =

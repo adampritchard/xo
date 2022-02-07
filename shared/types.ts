@@ -41,8 +41,8 @@ export type GameStateMessage = {
 };
 
 export type ClientMessage =
-    TakeTurnMessage
-  | JoinRoomMessage;
+  | JoinRoomMessage
+  | TakeTurnMessage;
 
 type JoinRoomMessage = {
   type: 'join-room',

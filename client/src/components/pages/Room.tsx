@@ -7,8 +7,9 @@ import {
   RoomJoinedMessge,
   RoomFullMessage,
   RoomNotFoundMessage,
+  Winner,
 } from 'shared/types';
-import { PlayerHeading, Board, Winner } from 'components';
+import { Board } from 'components/game';
 import { parseMessage, sendMessage, UnreachableCaseError } from 'utils/misc';
 
 type Status = 'init' | 'room-joined' | 'room-full' | 'room-not-found' | 'room-closed';
@@ -83,17 +84,20 @@ export function Room() {
     });
   }, [roomId]);
 
-  const onTakeTurn = React.useCallback((row: number, col: number) => {
-    if (!socket) return;
-    if (game.turn !== player) return;
-    if (game.board[row][col] !== null) return;
-    if (game.winner) return;
+  const onTakeTurn = React.useMemo(() => {
+    if (!socket) return null;
+    if (game.turn !== player) return null;
+    if (game.winner) return null;
 
-    sendMessage(socket, { type: 'take-turn', row, col });
+    return (row: number, col: number) => {
+      if (game.board[row][col] === null) {
+        sendMessage(socket, { type: 'take-turn', row, col });
+      }
+    };
   }, [socket, player, game]);
 
   if (status === 'init') {
-    return <div><h1>Loading</h1></div>;
+    return null;
   }
 
   if (status === 'room-full') {
@@ -109,23 +113,79 @@ export function Room() {
   }
 
   return (
-    <div>
-      <PlayerHeading player={player} />
-
+    <div className="room-page">
       {game.winner !== null
-        ? <Winner player={player} winner={game.winner} />
+        ? <WinnerHeader player={player} winner={game.winner} />
         : game.turn === null
-        ? <h3>Waiting for another player...</h3>
-        : game.turn === player
-        ? <h3>Your Turn</h3>
-        : <h3>Their turn...</h3>
+        ? <InviteHeader />
+        : <TurnHeader player={player} turn={game.turn} />
       }
 
-      <Board board={game.board} onTakeTurn={onTakeTurn} />
+      <Board
+        board={game.board}
+        onTakeTurn={onTakeTurn}
+      />
 
       {expiresIn &&
-        <div>This room will self-desctruct in {expiresIn}</div>
+        <div>This room will self-destruct in {expiresIn}</div>
       }
     </div>
+  );
+}
+
+
+type WinnerHeaderProps = {
+  player: PlayerKey | null,
+  winner: Winner,
+};
+
+function WinnerHeader({ player, winner }: WinnerHeaderProps) {
+  const winnerText = winner === 'draw'
+    ? 'Draw... 😴'
+    : player === winner
+    ? 'You Win! 🎉'
+    : 'You Lose 😭';
+
+  return (
+    <div>
+      <YouAre player={player} />
+      <h1>{winnerText}</h1>
+    </div>
+  );
+}
+
+
+function InviteHeader() {
+  return (
+    <div>
+      <h2>Invite someone to play</h2>
+      <h1 className="text-primary">{window.location.host}{window.location.pathname}</h1>
+    </div>
+  );
+}
+
+
+type TurnHeaderProps = {
+  player: PlayerKey | null,
+  turn: PlayerKey,
+};
+
+function TurnHeader({ player, turn }: TurnHeaderProps) {
+  return (
+    <div>
+      <YouAre player={player} />
+      <h1>{turn === player ? 'Your Turn' : 'Their Turn...'}</h1>
+    </div>
+  );
+}
+
+
+type YouAreProps = {
+  player: PlayerKey | null,
+};
+
+function YouAre({ player }: YouAreProps) {
+  return (
+    <h2>You are <span className="text-primary text-weight-normal">{player}</span></h2>
   );
 }

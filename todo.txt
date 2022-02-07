@@ -15,8 +15,16 @@
 ✔ disconnect everyone when room is removed
 ✔ set up a ping that closes connection if no pong
 ✔ 'Waiting for another player' message
+✔ styles
 
-- styles
+- cell negative margin
+- styles for room full/closed/etc
+
+- show latest move in primary color
+- show winning line in primary color
+
+- show error if create room fails
+- add 'create new room' buttons to room full / room closed / etc.
 
 - send expiresIn every 30 seconds
 - Figure out how to test disconnects and use the Reaper class

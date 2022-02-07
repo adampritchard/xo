@@ -14,14 +14,12 @@ export function Start() {
   };
 
   return (
-    <div>
-      <h1>exoh</h1>
+    <div className="start-page">
+      <h1 className="logo">exoh</h1>
 
-      <div>
-        <button onClick={onPressStart}>
-          Start Game
-        </button>
-      </div>
+      <button onClick={onPressStart}>
+        New Game
+      </button>
     </div>
   );
 }

@@ -15,14 +15,14 @@ import { parseMessage, sendMessage, UnreachableCaseError } from 'utils/misc';
 type Status = 'init' | 'room-joined' | 'room-full' | 'room-not-found' | 'room-closed';
 
 const initialGame: GameState = {
-  turn: null,
-  winner: null,
   board: [
     [null, null, null],
     [null, null, null],
     [null, null, null],
   ],
+  turn: null,
   lastTurn: null,
+  result: null,
 };
 
 export function Room() {
@@ -88,7 +88,7 @@ export function Room() {
   const onTakeTurn = React.useMemo(() => {
     if (!socket) return null;
     if (game.turn !== player) return null;
-    if (game.winner) return null;
+    if (game.result) return null;
 
     return (row: number, col: number) => {
       if (game.board[row][col] === null) {
@@ -115,8 +115,8 @@ export function Room() {
 
   return (
     <div className="room-page">
-      {game.winner !== null
-        ? <WinnerHeader player={player} winner={game.winner} />
+      {game.result !== null
+        ? <WinnerHeader player={player} winner={game.result.winner} />
         : game.turn === null
         ? <InviteHeader />
         : <TurnHeader player={player} turn={game.turn} />
@@ -125,6 +125,7 @@ export function Room() {
       <Board
         board={game.board}
         lastTurn={game.lastTurn}
+        winningLine={game.result?.winningLine || null}
         onTakeTurn={onTakeTurn}
       />
 

@@ -18,8 +18,7 @@
 ✔ styles
 ✔ vertically align pieces
 ✔ highlight latest move
-
-- highlight winning line
+✔ highlight winning line
 
 - styles for room full/closed/etc
 

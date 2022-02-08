@@ -11,14 +11,14 @@ export class Room {
   private players = new Map<PlayerKey, WebSocket>();
 
   private game: GameState = {
-    turn: null,
-    winner: null,
     board: [
       [null, null, null],
       [null, null, null],
       [null, null, null],
     ],
+    turn: null,
     lastTurn: null,
+    result: null,
   };
 
   public constructor(roomId: string, expiry: number) {
@@ -89,10 +89,11 @@ export class Room {
 
     if (Game.isCellEmpty(this.game.board, row, col)) {
       Game.setCell(this.game.board, row, col, key);
-      this.game.lastTurn = { row, col };
+      this.game.lastTurn = [row, col];
 
-      this.game.winner = Game.checkForWinner(this.game.board);
-      if (!this.game.winner) this.nextTurn();
+      this.game.result = Game.checkForGameOver(this.game.board);
+      if (!this.game.result) this.nextTurn();
+
       this.notifyPlayers();
     }
   }

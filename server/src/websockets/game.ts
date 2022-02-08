@@ -1,4 +1,4 @@
-import { PlayerKey, GameBoard, Winner } from 'shared/types';
+import { PlayerKey, GameBoard, BoardLine, GameResult } from 'shared/types';
 
 export class Game {
   public static isCellEmpty(board: GameBoard, row: number, col: number): boolean {
@@ -9,8 +9,8 @@ export class Game {
     board[row][col] = value;
   }
 
-  public static checkForWinner(board: GameBoard): Winner {
-    const winningLines = [
+  public static checkForGameOver(board: GameBoard): GameResult|null {
+    const winningLines: BoardLine[] = [
       // rows.
       [[0, 0], [0, 1], [0, 2]],
       [[1, 0], [1, 1], [1, 2]],
@@ -29,18 +29,18 @@ export class Game {
     // Check for winning line.
     for (const line of winningLines) {
       const winner = this.winnerForLine(board, line);
-      if (winner) return winner;
+      if (winner) return { winner, winningLine: line };
     }
 
     // Check for draw.
     if (this.isBoardFull(board)) {
-      return 'draw';
+      return { winner: 'draw', winningLine: null };
     }
 
     return null;
   }
   
-  private static winnerForLine(board: GameBoard, line: number[][]) {
+  private static winnerForLine(board: GameBoard, line: BoardLine) {
     const [aRow, aCell] = line[0];
     const [bRow, bCell] = line[1];
     const [cRow, cCell] = line[2];

@@ -1,19 +1,22 @@
 export type PlayerKey = 'o' | 'x';
 export type GameBoard = (PlayerKey | null)[][];
 
-export type Winner = PlayerKey | 'draw' | null;
+export type Winner = PlayerKey | 'draw';
 
-export type GameState = {
-  turn: PlayerKey | null,
+export type BoardPos = [number, number];
+export type BoardLine = [BoardPos, BoardPos, BoardPos];
+
+export type GameResult = {
   winner: Winner,
-  board: GameBoard,
-  lastTurn: BoardPos | null,
+  winningLine: BoardLine | null,
 };
 
-export type BoardPos = {
-  row: number,
-  col: number,
-}
+export type GameState = {
+  board: GameBoard,
+  turn: PlayerKey | null,
+  lastTurn: BoardPos | null,
+  result: GameResult | null,
+};
 
 export type ServerMessage =
   | RoomJoinedMessge

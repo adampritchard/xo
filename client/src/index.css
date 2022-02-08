@@ -84,6 +84,8 @@ h2 {
   font-size: var(--piece-size);
 }
 
+.piece--highlight { color: var(--primary); }
+
 button {
   font-family: 'Sniglet', sans-serif;
   border: none;

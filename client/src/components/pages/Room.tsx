@@ -22,6 +22,7 @@ const initialGame: GameState = {
     [null, null, null],
     [null, null, null],
   ],
+  lastTurn: null,
 };
 
 export function Room() {
@@ -123,6 +124,7 @@ export function Room() {
 
       <Board
         board={game.board}
+        lastTurn={game.lastTurn}
         onTakeTurn={onTakeTurn}
       />
 

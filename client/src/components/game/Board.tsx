@@ -1,15 +1,16 @@
 import React from 'react';
 import clsx from 'clsx';
-import { PlayerKey, GameBoard } from 'shared/types';
+import { PlayerKey, GameBoard, BoardPos } from 'shared/types';
 
 type TakeTurnFn = (rowIndex: number, colIndex: number) => void;
 
 type BoardProps = {
   board: GameBoard,
+  lastTurn: BoardPos | null,
   onTakeTurn: TakeTurnFn | null,
 };
 
-export function Board({ board, onTakeTurn }: BoardProps) {
+export function Board({ board, lastTurn, onTakeTurn }: BoardProps) {
   return (
     <div className="board">
       {board.map((row, rowIndex) =>
@@ -20,6 +21,7 @@ export function Board({ board, onTakeTurn }: BoardProps) {
               value={cell}
               onClick={onTakeTurn ? () => onTakeTurn(rowIndex, colIndex) : null}
               colIndex={colIndex}
+              isLatest={rowIndex === lastTurn?.row && colIndex === lastTurn?.col}
             />
           )}
         </Row>
@@ -45,15 +47,18 @@ type CellProps = {
   value: PlayerKey | null,
   onClick: (() => void) | null,
   colIndex: number,
+  isLatest: boolean,
 };
 
-function Cell({ value, onClick, colIndex }: CellProps) {
+function Cell({ value, onClick, colIndex, isLatest }: CellProps) {
   const isPlayable = !value && !!onClick;
-  const className = clsx('cell', `col-${colIndex}`, isPlayable && 'cell--playable');
 
   return (
-    <div className={className} onClick={isPlayable ? onClick : undefined}>
-      <div className="piece">
+    <div
+      className={clsx('cell', `col-${colIndex}`, isPlayable && 'cell--playable')}
+      onClick={isPlayable ? onClick : undefined}
+    >
+      <div className={clsx('piece', isLatest && 'piece--highlight')}>
         {value || <>&nbsp;</>}
       </div>
     </div>

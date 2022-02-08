@@ -7,7 +7,13 @@ export type GameState = {
   turn: PlayerKey | null,
   winner: Winner,
   board: GameBoard,
+  lastTurn: BoardPos | null,
 };
+
+export type BoardPos = {
+  row: number,
+  col: number,
+}
 
 export type ServerMessage =
   | RoomJoinedMessge

@@ -18,6 +18,7 @@ export class Room {
       [null, null, null],
       [null, null, null],
     ],
+    lastTurn: null,
   };
 
   public constructor(roomId: string, expiry: number) {
@@ -88,6 +89,7 @@ export class Room {
 
     if (Game.isCellEmpty(this.game.board, row, col)) {
       Game.setCell(this.game.board, row, col, key);
+      this.game.lastTurn = { row, col };
 
       this.game.winner = Game.checkForWinner(this.game.board);
       if (!this.game.winner) this.nextTurn();

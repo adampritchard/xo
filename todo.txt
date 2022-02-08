@@ -17,9 +17,9 @@
 ✔ 'Waiting for another player' message
 ✔ styles
 ✔ vertically align pieces
+✔ highlight latest move
 
-- show latest move in primary color
-- show winning line in primary color
+- highlight winning line
 
 - styles for room full/closed/etc
 

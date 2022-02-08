@@ -16,12 +16,12 @@
 ✔ set up a ping that closes connection if no pong
 ✔ 'Waiting for another player' message
 ✔ styles
-
-- cell negative margin
-- styles for room full/closed/etc
+✔ vertically align pieces
 
 - show latest move in primary color
 - show winning line in primary color
+
+- styles for room full/closed/etc
 
 - show error if create room fails
 - add 'create new room' buttons to room full / room closed / etc.

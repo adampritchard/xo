@@ -53,7 +53,9 @@ function Cell({ value, onClick, colIndex }: CellProps) {
 
   return (
     <div className={className} onClick={isPlayable ? onClick : undefined}>
-      {value || <>&nbsp;</>}
+      <div className="piece">
+        {value || <>&nbsp;</>}
+      </div>
     </div>
   );
 }

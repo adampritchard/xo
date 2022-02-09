@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { ExohApi } from 'utils/ExohApi';
+import { XoApi } from 'utils/XoApi';
 
 export function Start() {
   const navigate = useNavigate();
 
   const onPressStart = async () => {
-    const result = await ExohApi.createRoom();
+    const result = await XoApi.createRoom();
     if (result.roomId) {
       navigate(result.roomId);
     } else {
@@ -15,7 +15,7 @@ export function Start() {
 
   return (
     <div className="start-page">
-      <h1 className="logo">exoh</h1>
+      <h1 className="logo">xo</h1>
 
       <button onClick={onPressStart}>
         New Game

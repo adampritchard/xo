@@ -19,6 +19,7 @@
 ✔ vertically align pieces
 ✔ highlight latest move
 ✔ highlight winning line
+✔ rename to xo
 
 - styles for room full/closed/etc
 

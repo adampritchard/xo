@@ -1,6 +1,6 @@
 import { CreateRoomRes } from 'shared/types';
 
-export class ExohApi {
+export class XoApi {
   public static async createRoom(): Promise<CreateRoomRes> {
     return this.post('http://localhost:8080/room', {});
   }

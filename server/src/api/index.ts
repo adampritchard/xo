@@ -10,7 +10,7 @@ export function initApiServer({ port }: InitParams) {
   api.use(cors());
 
   api.get('/', (req, res) => {
-    res.json({ msg: 'Hello, exoh!' });
+    res.json({ msg: 'Hello, xo!' });
   });
 
   api.post('/room', (req, res: Response<CreateRoomRes>) => {

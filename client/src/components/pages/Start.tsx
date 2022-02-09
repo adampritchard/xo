@@ -1,23 +1,13 @@
-import { useNavigate } from 'react-router-dom';
-import { XoApi } from 'utils/XoApi';
+import { useStartNewGame } from 'hooks';
 
 export function Start() {
-  const navigate = useNavigate();
-
-  const onPressStart = async () => {
-    const result = await XoApi.createRoom();
-    if (result.roomId) {
-      navigate(result.roomId);
-    } else {
-      // TODO: show an error...
-    }
-  };
+  const startNewGame = useStartNewGame();
 
   return (
     <div className="start-page">
       <h1 className="logo">xo</h1>
 
-      <button onClick={onPressStart}>
+      <button onClick={startNewGame}>
         New Game
       </button>
     </div>

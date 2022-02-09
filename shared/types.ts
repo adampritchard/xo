@@ -1,3 +1,5 @@
+export type StringMap = { [key: string]: string };
+
 export type PlayerKey = 'o' | 'x';
 export type GameBoard = (PlayerKey | null)[][];
 
@@ -17,6 +19,8 @@ export type GameState = {
   lastTurn: BoardPos | null,
   result: GameResult | null,
 };
+
+export type RoomStatus = 'init' | 'room-joined' | 'room-full' | 'room-not-found' | 'room-closed';
 
 export type ServerMessage =
   | RoomJoinedMessge

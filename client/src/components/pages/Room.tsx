@@ -8,11 +8,11 @@ import {
   RoomFullMessage,
   RoomNotFoundMessage,
   Winner,
+  RoomStatus,
 } from 'shared/types';
+import { NoRoom } from 'components/pages';
 import { Board } from 'components/game';
 import { parseMessage, sendMessage, UnreachableCaseError } from 'utils/misc';
-
-type Status = 'init' | 'room-joined' | 'room-full' | 'room-not-found' | 'room-closed';
 
 const initialGame: GameState = {
   board: [
@@ -28,7 +28,7 @@ const initialGame: GameState = {
 export function Room() {
   const { roomId } = useParams();
   
-  const [status, setStatus] = React.useState<Status>('init');
+  const [status, setStatus] = React.useState<RoomStatus>('init');
   const [socket, setWebSocket] = React.useState<WebSocket|null>(null);
   const [player, setPlayer] = React.useState<PlayerKey|null>(null);
   const [game, setGame] = React.useState<GameState>(initialGame);
@@ -101,16 +101,8 @@ export function Room() {
     return null;
   }
 
-  if (status === 'room-full') {
-    return <div><h1>This Room is Full :(</h1></div>;
-  }
-
-  if (status === 'room-not-found') {
-    return <div><h1>Room Not Found</h1></div>;
-  }
-
-  if (status === 'room-closed') {
-    return <div><h1>This Room is Now Closed :(</h1></div>;
+  if (['room-full', 'room-not-found', 'room-closed'].includes(status)) {
+    return <NoRoom status={status} />
   }
 
   return (

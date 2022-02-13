@@ -24,10 +24,10 @@
 ✔ add 'new game' buttons to room full / room closed / etc.
 ✔ move api to sub path
 ✔ use same port for api and websockets
+✔ serve the built client files
+✔ setup dev server proxy
 
-- remove localhost from paths
-- remove ports from reqests
-
+- disable logs in production
 - show error if create room fails
 - send expiresIn every 30 seconds
 - figure out how to test disconnects and use the Reaper class

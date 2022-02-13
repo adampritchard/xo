@@ -1,8 +1,9 @@
 import http from 'http';
 import express from 'express';
 import cors from 'cors';
+import { initFileServer } from './file-server';
 import { initApi } from './api';
-import { initWebSockets } from './websockets';
+import { initWebSockets } from './web-sockets';
 
 const port = 8080;
 
@@ -11,6 +12,7 @@ app.use(cors());
 
 const server = http.createServer(app);
 
+initFileServer({ app });
 initApi({ app });
 initWebSockets({ server });
 

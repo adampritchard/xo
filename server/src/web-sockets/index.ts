@@ -6,7 +6,7 @@ import { Rooms } from './rooms';
 type InitParams = { server: Server };
 
 export function initWebSockets({ server }: InitParams) {
-  const wsServer = new WebSocketServer({ server });
+  const wsServer = new WebSocketServer({ server, path: '/xo-ws' });
 
   wsServer.on('connection', (ws, req) => {
     console.log('new connection');

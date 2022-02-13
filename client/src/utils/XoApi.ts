@@ -2,7 +2,7 @@ import { CreateRoomRes } from 'shared/types';
 
 export class XoApi {
   public static async createRoom(): Promise<CreateRoomRes> {
-    return this.post('http://localhost:8080/api/room', {});
+    return this.post('/api/room', {});
   }
 
   private static async post(url: string, data: any) {

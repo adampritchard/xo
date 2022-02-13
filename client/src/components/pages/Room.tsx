@@ -37,7 +37,7 @@ export function Room() {
   React.useEffect(() => {
     if (!roomId) return;
 
-    const ws = new WebSocket('ws://localhost:8080');
+    const ws = new WebSocket(`ws://${window.location.host}/xo-ws`);
     setWebSocket(ws);
 
     ws.addEventListener('open', (event) => {

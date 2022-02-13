@@ -1,6 +1,6 @@
 import { Express, Response } from 'express';
 import { CreateRoomRes } from 'shared/types';
-import { Rooms } from '../websockets/rooms';
+import { Rooms } from '../web-sockets/rooms';
 
 type InitParams = { app: Express };
 

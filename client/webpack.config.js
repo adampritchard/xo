@@ -38,6 +38,10 @@ module.exports = {
     static: {
       directory: path.join(__dirname, 'public'),
     },
+    proxy: {
+      '/api': 'http://localhost:8080',
+      '/xo-ws': { target: 'ws://localhost:8080', ws: true },
+    },
   },
 
   plugins: [

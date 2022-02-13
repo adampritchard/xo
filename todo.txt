@@ -23,8 +23,8 @@
 ✔ styles for room full/closed/etc
 ✔ add 'new game' buttons to room full / room closed / etc.
 ✔ move api to sub path
+✔ use same port for api and websockets
 
-- let express handle websocket traffic
 - remove localhost from paths
 - remove ports from reqests
 

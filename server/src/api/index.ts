@@ -1,24 +1,16 @@
-import express, { Response } from 'express';
-import cors from 'cors';
+import { Express, Response } from 'express';
 import { CreateRoomRes } from 'shared/types';
 import { Rooms } from '../websockets/rooms';
 
-type InitParams = { port: number };
+type InitParams = { app: Express };
 
-export function initApiServer({ port }: InitParams) {
-  const api = express();
-  api.use(cors());
-
-  api.get('/api', (req, res) => {
+export function initApi({ app }: InitParams) {
+  app.get('/api', (req, res) => {
     res.json({ msg: 'Hello, xo api!' });
   });
 
-  api.post('/api/room', (req, res: Response<CreateRoomRes>) => {
+  app.post('/api/room', (req, res: Response<CreateRoomRes>) => {
     const roomId = Rooms.create();
     res.json({ roomId });
-  });
-
-  api.listen(port, () => {
-    console.log(`api server listening on port ${port}`);
   });
 }

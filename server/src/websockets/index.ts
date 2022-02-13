@@ -1,15 +1,14 @@
+import { Server } from 'http';
 import { WebSocketServer } from 'ws';
 import { parseMessage } from './utils';
 import { Rooms } from './rooms';
 
-type InitParams = { port: number };
+type InitParams = { server: Server };
 
-export function initWebSocketServer({ port }: InitParams) {
-  const server = new WebSocketServer({ port });
+export function initWebSockets({ server }: InitParams) {
+  const wsServer = new WebSocketServer({ server });
 
-  console.log(`web socket server listening on port ${port}`);
-
-  server.on('connection', (ws, req) => {
+  wsServer.on('connection', (ws, req) => {
     console.log('new connection');
 
     ws.on('message', (buffer) => {
@@ -21,6 +20,4 @@ export function initWebSocketServer({ port }: InitParams) {
       }
     });
   });
-
-  return server;
 }

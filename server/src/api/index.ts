@@ -9,11 +9,11 @@ export function initApiServer({ port }: InitParams) {
   const api = express();
   api.use(cors());
 
-  api.get('/', (req, res) => {
-    res.json({ msg: 'Hello, xo!' });
+  api.get('/api', (req, res) => {
+    res.json({ msg: 'Hello, xo api!' });
   });
 
-  api.post('/room', (req, res: Response<CreateRoomRes>) => {
+  api.post('/api/room', (req, res: Response<CreateRoomRes>) => {
     const roomId = Rooms.create();
     res.json({ roomId });
   });

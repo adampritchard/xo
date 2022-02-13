@@ -15,7 +15,7 @@
       "utils": ["./src/utils"],
       "utils/*": ["./src/utils/*"]
     },
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

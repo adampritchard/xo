@@ -22,6 +22,11 @@
 ✔ rename to xo
 ✔ styles for room full/closed/etc
 ✔ add 'new game' buttons to room full / room closed / etc.
+✔ move api to sub path
+
+- let express handle websocket traffic
+- remove localhost from paths
+- remove ports from reqests
 
 - show error if create room fails
 - send expiresIn every 30 seconds

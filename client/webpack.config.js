@@ -6,7 +6,7 @@ module.exports = {
 
   entry: './src/index.tsx',
   output: {
-    filename: 'build/app.js',
+    filename: 'app.js',
   },
 
   resolve: {
@@ -26,7 +26,7 @@ module.exports = {
         loader: 'ts-loader',
       },
       { // CSS
-        test: /\.css$/i,
+        test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
     ],
